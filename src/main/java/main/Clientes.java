@@ -11,7 +11,7 @@ public class Clientes {
     public void menu(){
         int opcion;
         do{
-            System.out.println("¿Qué quieres hacer?\n1. Añadir cliente\n2.Actualizar datos\n3.Eliminar cliente\n4.Ver compras\n0.Salir");
+            System.out.println("¿Qué quieres hacer?\n1. Añadir cliente\n2.Actualizar datos\n3.Eliminar cliente\n4.Ver compras\n5.Ver clientes\n0.Salir");
             opcion=sc.nextInt();
             switch(opcion){
                 case 1:
@@ -26,6 +26,10 @@ public class Clientes {
                 case 4:
                     System.out.println("ver compras");
                     break;
+                case 5:
+                    System.out.println("mostrar clientes");
+                    break;
+
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
