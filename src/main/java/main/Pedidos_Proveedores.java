@@ -35,3 +35,6 @@ public class Pedidos_Proveedores {
         }while(opcion!=0);
     }
 }
+//select=> select =>update para comprar a los proevedores
+//si quiero comprar un producto que no tengo en stock la consulta es difernte se usaría INSERT
+//hacer select dinamico
