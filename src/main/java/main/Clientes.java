@@ -1,5 +1,6 @@
 package main;
 
+import java.net.StandardSocketOptions;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -28,19 +29,40 @@ public class Clientes {
             opcion=sc.nextInt();
             switch(opcion){
                 case 1:
-                    System.out.println("Añade cliente");
+                    System.out.println("---Añade cliente---");
+                    System.out.println("Nombre del cliente: ");
+                    String nombre = sc.nextLine();
+                    System.out.println("Dirección: ");
+                    String direccion = sc.nextLine() ;
+                    System.out.println("Contacto");
+                    String contacto= sc.nextLine();
+                    añadirCliente(nombre,direccion,contacto);
                     break;
                 case 2:
-                    System.out.println("Actualiza datos");
+                    System.out.println("---Actualizar datos---");
+                    System.out.println("ID del cleinte a actualizar: ");
+                    int id= sc.nextInt();
+                    sc.nextLine();//Limpiar el buffer para que no de fallos
+                    System.out.println("Nuevo nombre: ");
+                    String nuevoNombre= sc.nextLine();
+                    System.out.println("Nueva dirección: ");
+                    String nuevaDireccion= sc.nextLine() ;
+                    System.out.println("Nuevo Contacto: ");
+                    String nuevoContacto= sc.nextLine();
+                    actualizarDatosCliente(id,nuevoNombre,nuevaDireccion,nuevoContacto);
                     break;
                 case 3:
-                    System.out.println("Elimina cliente");
+                    System.out.println("---Elimina cliente---");
+                    System.out.println("ID del cliente a elimnar: ");
+                    int idEliminar= sc.nextInt();
+                    eliminarCliente(idEliminar);
                     break;
                 case 4:
                     System.out.println("ver compras");
                     break;
                 case 5:
                     System.out.println("mostrar clientes");
+                    mostrarCLientes();
                     break;
 
                 case 0:
@@ -54,12 +76,12 @@ public class Clientes {
 
     /**
      * Metodo que añade un cliente a la base de datos
-     * @param nombre
-     * @param direccion
-     * @param contacto
+     * @param nombre nombre del cliente
+     * @param direccion direccion del cliente
+     * @param contacto numero de telefono
      */
-    public static void añadirCliente (String nombre, String direccion, String contacto)  {
-        String sql = "UPDATE Clientes SET nombre= ?, direccion= ? contacto=?)VALUES(?,?,?) ";
+    public  void añadirCliente (String nombre, String direccion, String contacto)  {
+        String sql = "INSERT INTO clientes (nombre,dirección,contacto)VALUES(?,?,?) ";
         try(Connection conn= getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1,nombre);
@@ -70,12 +92,72 @@ public class Clientes {
         }catch (SQLException e){
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Metodo que actualiza los datos del cliente
+     * @param idCliente ID del cliente al que hay que actualizar los datos
+     * @param nombre Nuevo nombre
+     * @param direccion Nueva Direccion
+     * @param contacto Nuevo telefono
+     */
+    public  void actualizarDatosCliente(int idCliente, String nombre, String direccion, String contacto){
+        String sql = "UPDATE clientes SET nombre=?, direccion=?, contacto=? WHERE id_cliente=?";
+        try (Connection conn= getConnection();
+             PreparedStatement ps= conn.prepareStatement(sql)){
+            ps.setString(1,nombre);
+            ps.setString(2,direccion);
+            ps.setString(3,contacto);
+            ps.setInt(4,idCliente);
+            ps.executeUpdate();
+            System.out.println("Cliente actualizado correctamente.");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
 
+    }
 
-
-
+    /**
+     * Elimina un cliente de la base de datos
+     * @param idCliente ID del cliente
+     */
+    public void eliminarCliente(int idCliente){
+        String sql = "DELETE FROM clientes WHERE idCliente=?";
+        try(Connection conn= getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setInt(1,idCliente);
+            ps.executeUpdate();
+            System.out.println("Cliente eliminado correctamente");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
 
 
     }
+    public void verComprasCliente(int idCliente){
+        System.out.println("ver compras hacer un join...: ");
+    }
+
+    /**
+     * Metodo que muestra los clientes
+     */
+    public void mostrarCLientes (){
+        String sql = "SELECT * FROM clientes";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs= ps.executeQuery()){
+            System.out.println("\n---Lista Clientes---");
+            while (rs.next()){
+                System.out.println("ID: "+rs.getInt("id_cliente")+
+                                   "  Nombre: "+ rs.getString("nombre")+
+                                   "  Dirección: "+rs.getString("direccion")+
+                                   "  Contacto: "+ rs.getString("contacto"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
 }
+

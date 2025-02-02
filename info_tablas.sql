@@ -37,8 +37,6 @@ CREATE TABLE IF NOT EXISTS productos(
     FOREIGN KEY (id_categoria) REFERENCES categorias (id_categoria),
     FOREIGN KEY (id_proveedor) REFERENCES proveedores (id_proveedor)
 );
-USE proyecto;
-ALTER TABLE productos ADD fecha_caducidad DATE;
 
 
 -- Creamos la tabla clientes

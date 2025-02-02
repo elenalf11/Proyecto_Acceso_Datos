@@ -27,6 +27,8 @@ public class Engine {
             switch (opcion){
                 case 1:
                     System.out.println("Mostrar info sobre Clientes");
+                    Clientes cliente = new Clientes();
+                    cliente.menu();
                     break;
                 case 2:
                     System.out.println("Mostrar info sobre Empleados");
