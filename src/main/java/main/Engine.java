@@ -37,12 +37,16 @@ public class Engine {
                     break;
                 case 3:
                     System.out.println("Mostrar info sobre Pedidos Proveedores");
+                    Pedidos_Proveedores pp= new Pedidos_Proveedores();
+                    pp.menu();
                     break;
                 case 4:
                     System.out.println("Mostrar info sobre Productos");
                     break;
                 case 5:
                     System.out.println("Mostar info sobre Proveedores");
+                    Proveedores proveedor = new Proveedores();
+                    proveedor.menu();
                     break;
                 case 6:
                     System.out.println("Mostrar info sobre Ventas");
