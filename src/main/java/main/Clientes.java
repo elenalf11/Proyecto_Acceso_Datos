@@ -10,6 +10,7 @@ public class Clientes {
     private static final  String PASWORD=  "Victor.241104";
     private Scanner sc = new Scanner(System.in);
 
+
     /**
      * Establece la conexion con la base de datos
      * @return objeto de conexión
@@ -31,11 +32,12 @@ public class Clientes {
                 case 1:
                     System.out.println("---Añade cliente---");
                     System.out.println("Nombre del cliente: ");
-                    String nombre = sc.nextLine();
+                    String nombre = sc.next();
                     System.out.println("Dirección: ");
-                    String direccion = sc.nextLine() ;
+                    String direccion = sc.next() ;
+                    sc.nextLine();
                     System.out.println("Contacto");
-                    String contacto= sc.nextLine();
+                    String contacto= sc.next();
                     añadirCliente(nombre,direccion,contacto);
                     break;
                 case 2:
@@ -58,10 +60,13 @@ public class Clientes {
                     eliminarCliente(idEliminar);
                     break;
                 case 4:
-                    System.out.println("ver compras");
+                    System.out.println("ver compras de un cliente ");
+                    System.out.println("ID del cliente para ver compras: ");
+                    int idCliente= sc.nextInt();
+                    verComprasCliente(idCliente);
                     break;
                 case 5:
-                    System.out.println("mostrar clientes");
+                    System.out.println("mostrar clientes ");
                     mostrarCLientes();
                     break;
 
@@ -80,13 +85,13 @@ public class Clientes {
      * @param direccion direccion del cliente
      * @param contacto numero de telefono
      */
-    public  void añadirCliente (String nombre, String direccion, String contacto)  {
-        String sql = "INSERT INTO clientes (nombre,dirección,contacto)VALUES(?,?,?) ";
+    public  void añadirCliente (String nombre, String contacto, String direccion)  {
+        String sql = "INSERT INTO clientes (nombre,contacto,direccion)VALUES(?,?,?) ";
         try(Connection conn= getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1,nombre);
-            ps.setString(2,direccion);
-            ps.setString(3,contacto);
+            ps.setString(2,contacto);
+            ps.setString(3,direccion);
             ps.executeUpdate();
             System.out.println("Cliente añadido correctamente.");
         }catch (SQLException e){
@@ -101,13 +106,13 @@ public class Clientes {
      * @param direccion Nueva Direccion
      * @param contacto Nuevo telefono
      */
-    public  void actualizarDatosCliente(int idCliente, String nombre, String direccion, String contacto){
+    public  void actualizarDatosCliente(int idCliente, String nombre, String contacto, String direccion){
         String sql = "UPDATE clientes SET nombre=?, direccion=?, contacto=? WHERE id_cliente=?";
         try (Connection conn= getConnection();
              PreparedStatement ps= conn.prepareStatement(sql)){
             ps.setString(1,nombre);
-            ps.setString(2,direccion);
-            ps.setString(3,contacto);
+            ps.setString(2,contacto);
+            ps.setString(3,direccion);
             ps.setInt(4,idCliente);
             ps.executeUpdate();
             System.out.println("Cliente actualizado correctamente.");
@@ -122,7 +127,7 @@ public class Clientes {
      * @param idCliente ID del cliente
      */
     public void eliminarCliente(int idCliente){
-        String sql = "DELETE FROM clientes WHERE idCliente=?";
+        String sql = "DELETE FROM clientes WHERE id_cliente=?";
         try(Connection conn= getConnection();
             PreparedStatement ps=conn.prepareStatement(sql)){
             ps.setInt(1,idCliente);
@@ -134,8 +139,29 @@ public class Clientes {
 
 
     }
+
+    /**
+     * Muestra las compras realizadas por un cliente
+     * @param idCliente
+     */
     public void verComprasCliente(int idCliente){
-        System.out.println("ver compras hacer un join...: ");
+       String sql = "SELECT v.id_venta, v.fecha, v.total " +
+                    "FROM ventas v " +
+                    "JOIN clientes c ON v.id_cliente= c.id_cliente " +
+                    "WHERE c.id_cliente=?";
+       try(Connection conn = getConnection();
+           PreparedStatement ps= conn.prepareStatement(sql)){
+           ps.setInt(1,idCliente);
+           ResultSet rs = ps.executeQuery();
+           System.out.println(("\nCompras del cliente con ID : "+idCliente +" son: "));
+           while(rs.next()){
+               System.out.println(("ID venta: "+ rs.getInt("id_venta")+
+                       " Fecha: "+ rs.getDate("fecha")+
+                       " Total: "+ rs.getDouble("total")));
+           }
+       }catch(SQLException e){
+           e.printStackTrace();
+       }
     }
 
     /**
@@ -157,6 +183,8 @@ public class Clientes {
             e.printStackTrace();
         }
     }
+
+
 
 
 }
