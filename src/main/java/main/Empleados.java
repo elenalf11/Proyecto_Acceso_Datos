@@ -72,7 +72,9 @@ public class Empleados {
                     eliminarEmpleado(id_eliminado);
                     break;
                 case 4:
-                    System.out.println("Ver departamento");
+                    System.out.println("Id empleado que desea ver su departamento: ");
+                    int id_join = this.sc.nextInt();
+                    verDepartamento(id_join);
                     break;
                 case 5:
                     verEmpleados();
@@ -111,10 +113,10 @@ public class Empleados {
 
     /**
      * Metodo updateEmpleado
-     * Este metodo actualiza los datos de un empleado en especifico
+     * Este metodo actualiza los datos de un empleado en específico
      * @param nombre es el nuevo nombre
      * @param id_departamento es el nuevo id_departamento
-     * @param direccion es la nueva direccion
+     * @param direccion es la nueva dirección
      * @param contacto es el nuevo contacto
      * @param id_empleado es el id_empleado al que se le van a agregar estos cambios
      */
@@ -154,8 +156,24 @@ public class Empleados {
 
     }
 
-    public void verDepartamento(){
-
+    /**
+     * Metodo verDepartamento
+     * Este metodo te muestra el departamento en el que trabaja un empleado determinado
+     * @param id_empleado es el id de empleado que se desea saber su departamento
+     */
+    public void verDepartamento(int id_empleado){
+        String sql = "SELECT d.id, d.nombre FROM departamentos d" +
+                "JOIN empleados e ON d.id = e.id_empleado" +
+                "WHERE e.id_empleado = ?;";
+        try{
+            Connection c = getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id_empleado);
+            ResultSet rs = ps.executeQuery();
+            System.out.println("\n El departamento del cliente con id: " + id_empleado + "es id: " + rs.getInt("id") + " con nombre: " + rs.getString("nombre"));
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     /**
