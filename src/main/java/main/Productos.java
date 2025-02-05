@@ -36,7 +36,7 @@ public class Productos {
         int id_categoria;
         int id_proveedor;
         do{
-            System.out.println("¿Qué quieres hacer?\n1. Añadir producto\n2. Actualizar datos\n3. Eliminar producto\n4. Ver todos los productos\n0. Salir");
+            System.out.println("¿Qué quieres hacer?\n1. Añadir producto\n2. Actualizar datos\n3. Eliminar producto\n4. Ver todos los productos\n5. Ver info Proveedores \n6. Ver info categorías \n0. Salir");
             opcion = this.sc.nextInt();
             switch (opcion){
                 case 1:
@@ -86,6 +86,16 @@ public class Productos {
                     break;
                 case 4:
                     verInventario();
+                    break;
+                case 5:
+                    System.out.println("Dime el id del proveedor del que quieras saber la info: ");
+                    int id_join_1 = this.sc.nextInt();
+                    verProveedores(id_join_1);
+                    break;
+                case 6:
+                    System.out.println("Dime el id de categoría del que quieras saber la info: ");
+                    int id_join_2 = this.sc.nextInt();
+                    verCategoria(id_join_2);
                     break;
                 case 0:
                     System.out.println("Saliendo ...");
@@ -196,6 +206,47 @@ public class Productos {
             }
 
         } catch (SQLException e){
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+        }
+    }
+
+    /**
+     * Metodo verProveedores
+     * Este metodo te muestra toda la informacion referente al proveedor de un producto
+     * @param id_proveedor es el id del proveedor del que se quiere conocer la informacion
+     */
+    public void verProveedores(int id_proveedor){
+        String sql = "SELECT p.id_proveedor, p.nombre, p.contacto, p.direccion FROM proveedores p" +
+                "JOIN productos pr ON p.id_proveedor = pr.id_proveedor WHERE pr.id_proveedor = ?;";
+        try{
+            Connection c = getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id_proveedor);
+            ResultSet rs = ps.executeQuery();{
+                System.out.println("\nEl producto ha sido traslado por el proveedor con id: " + id_proveedor + ", cuyo nombre es: " + rs.getString("nombre") +
+                        ", su contacto es: " + rs.getString("contacto") + " y con dirección: " + rs.getString("direccion"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+        }
+    }
+
+    /**
+     * Metodo verCategoria
+     * Este metodo te muestra toda la informacion referente a la categoria de un producto
+     * @param id_categoria es el id de la categoria del que se quiere conocer la informacion
+     */
+    public void verCategoria(int id_categoria){
+        String sql = "SELECT c.id_categoria, c.nombre FROM categorias c" +
+                "JOIN productos p ON c.id_categoria = p.id_categoria WHERE p.id_categoria = ?";
+        try{
+            Connection c = getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id_categoria);
+            ResultSet rs = ps.executeQuery();{
+                System.out.println("\nEl producto pertenece a la categoria con id: " + id_categoria + ", cuyo nombre es " + rs.getString("nombre"));
+            }
+        } catch (SQLException e) {
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }

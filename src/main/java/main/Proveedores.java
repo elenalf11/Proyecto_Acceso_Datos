@@ -3,59 +3,79 @@ package main;
 import java.sql.*;
 import java.util.Scanner;
 
+/**
+ * Clase Proveedores
+ * En esta clase nos encontraremos todos los metodos relacionados con la tabla Proveedores
+ */
 public class Proveedores {
+
+    /**
+     * Atributos
+     */
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto?serverTimezone=UTC";
     private static final String USUARIO = "root";
     private static final String PASWORD = "Victor.241104";
     private Scanner sc = new Scanner(System.in);
 
-    //nombre, contacto, direccion
+    /**
+     * Metodo getConnection
+     * Este metodo genera la conexion con la base de datos mySQL
+     * @return devuelve un objeto de tipo Connection, que es la conexion con la base de datos
+     * @throws SQLException es la excepcion que puede lanzar el metodo, si ha habido algun problema con la conexion
+     */
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USUARIO, PASWORD);
+    }
+
+    /**
+     * Metodo menu
+     * Este metodo te muestra un menu con las opciones que puedes hacer en la tabla Productos
+     */
     public void menu() {
         int opcion;
         do {
             System.out.println("¿Qué quieres hacer?\n1. Añadir proveedor\n2.Actualizar Proveedor \n3.Eliminar Proveedor\n4.Ver proveedores\n5. mostrar detalle pedidos proveedores \n0. Salir");
-            opcion = sc.nextInt();
+            opcion = this.sc.nextInt();
             switch (opcion) {
                 case 1:
                     System.out.println("---Añade proveedor---");
                     System.out.println("Nombre proveedor: ");
-                    String nombre = sc.next();
+                    String nombre = this.sc.next();
                     System.out.println("Contacto proveedor");
-                    String contacto = sc.next();
-                    sc.nextLine();
+                    String contacto = this.sc.next();
+                    this.sc.nextLine();
                     System.out.println("Dirección proveedor: ");
-                    String direccion = sc.nextLine();
+                    String direccion = this.sc.nextLine();
                     añadirProveedor(nombre, contacto, direccion);
                     break;
                 case 2:
                     System.out.println("---Actualizar datos---");
                     System.out.println("ID del Proveedor a actualizar: ");
-                    int id = sc.nextInt();
-                    sc.nextLine();//Limpiar el buffer para que no de fallos
+                    int id = this.sc.nextInt();
+                    this.sc.nextLine();//Limpiar el buffer para que no de fallos
                     System.out.println("Nuevo nombre: ");
-                    String nuevoNombre = sc.nextLine();
+                    String nuevoNombre = this.sc.nextLine();
                     System.out.println("Nuevo contacto: ");
-                    String nuevoContacto = sc.nextLine();
+                    String nuevoContacto = this.sc.nextLine();
                     System.out.println("Nueva Dirección: ");
-                    String nuevaDireccion = sc.nextLine();
+                    String nuevaDireccion = this.sc.nextLine();
                     actualizarDatosProveedor(id, nuevoNombre, nuevaDireccion, nuevoContacto);
                     System.out.println("Actualiza proveedor");
                     break;
                 case 3:
                     System.out.println("---Elimina proveedor---");
                     System.out.println(("Id_proveedor a eliminar: "));
-                    int idEliminar = sc.nextInt();
+                    int idEliminar = this.sc.nextInt();
                     eliminaProveedor(idEliminar);
                     break;
                 case 4:
                     System.out.println("---Mostrar proveedores---");
                     mostrarProveedor();
-
                     break;
                 case 5:
                     System.out.println("detalle pedidos proveedores");
                     System.out.print("ID del proveedor para ver detalles de pedidos: ");
-                    int idProveedor = sc.nextInt();
+                    int idProveedor = this.sc.nextInt();
                     mostrarDetallePedidosProveedor(idProveedor);
                     break;
                 case 0:
@@ -70,19 +90,11 @@ public class Proveedores {
     }
 
     /**
-     * @return
-     * @throws SQLException
-     */
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USUARIO, PASWORD);
-    }
-
-    /**
-     * Añade un proveedor nuevo a la base de datos
-     *
-     * @param nombre
-     * @param contacto
-     * @param direccion
+     * Metodo añadirProveedor
+     * Este metodo añade un proveedor nuevo a la tabla Proveedores
+     * @param nombre es el nombre del proveedor
+     * @param contacto es el contacto del proveedor
+     * @param direccion es la direccion del proveedor
      */
     public void añadirProveedor(String nombre, String contacto, String direccion) {
         String sql = "INSERT INTO proveedores (nombre,contacto , direccion)VALUES(?,?,?)";
@@ -94,18 +106,18 @@ public class Proveedores {
             ps.executeUpdate();
             System.out.println("Proveedor añadido con éxito ");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
 
     }
 
     /**
-     * Actualiza los datos de un proveedor
-     *
-     * @param id
-     * @param nombre
-     * @param contacto
-     * @param direccion
+     * Metodo actualizarDatorProveedor
+     * Este metodo actualiza los datos de un proveedor
+     * @param id es el id del proveedor que se desea actualizar
+     * @param nombre es el nuevo nombre del proveedor
+     * @param contacto es el nuevo contacto del proveedor
+     * @param direccion es la nueva direccion del proveedor
      */
     public void actualizarDatosProveedor(int id, String nombre, String contacto, String direccion) {
         String sql = "UPDATE proveedores SET nombre=?, contacto=?,direccion=? WHERE id_proveedor=?";
@@ -118,10 +130,15 @@ public class Proveedores {
             ps.executeUpdate();
             System.out.println("Proveedor actualizado correctamente.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
+    /**
+     * Metodo eliminaProveedor
+     * Este metodo elimina un proveedor de la tabla Proveedores
+     * @param id es el id del proveedor que se desea eliminar
+     */
     public void eliminaProveedor(int id) {
         String sql = "DELETE FROM proveedores WHERE id_proveedor=?";
         try (Connection conn = getConnection();
@@ -130,10 +147,14 @@ public class Proveedores {
             ps.executeUpdate();
             System.out.println("Proveedor eliminado correctamente");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
+    /**
+     * Metodo mostrarProveedor
+     * Este metodo muestra todos los proveedores de la tabla Proveedores
+     */
     public void mostrarProveedor() {
         String sql = "SELECT *FROM proveedores";
         try (Connection conn = getConnection();
@@ -147,10 +168,15 @@ public class Proveedores {
                         " Dirección: " + rs.getString("direccion"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
+    /**
+     * Metodo mostrarDetallePedidosProveedor
+     * Este metodo te muestra la informacion realacionada con la tabla detalle pedido proveedor
+     * @param idProveedor es el id del proveedor que se desea saber mas informacion
+     */
     public static void mostrarDetallePedidosProveedor(int idProveedor) {
         String sql = "SELECT pp.id_pedido, pp.fecha_pedido, pp.total, dpp.id_detalle_proveedor, dpp.cantidad, dpp.precio_unitario_proveedor, p.nombre AS nombre_producto " +
                 "FROM pedidos_proveedor pp " +
@@ -172,9 +198,7 @@ public class Proveedores {
                         ", Producto: " + rs.getString("nombre_producto"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
-
-
     }
 }

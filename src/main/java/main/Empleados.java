@@ -107,7 +107,7 @@ public class Empleados {
             ps.executeQuery();
             System.out.println("Empleado añadido correctamente a la tabla");
         } catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
@@ -133,7 +133,7 @@ public class Empleados {
             ps.executeQuery();
             System.out.println("Datos del empleado actualizados correctamente");
         } catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
@@ -151,7 +151,7 @@ public class Empleados {
             ps.executeQuery();
             System.out.println("Empleado eliminado correctamente");
         } catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
 
     }
@@ -172,7 +172,7 @@ public class Empleados {
             ResultSet rs = ps.executeQuery();
             System.out.println("\n El departamento del cliente con id: " + id_empleado + "es id: " + rs.getInt("id") + " con nombre: " + rs.getString("nombre"));
         } catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
@@ -196,7 +196,7 @@ public class Empleados {
                 }
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 }

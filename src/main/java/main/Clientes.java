@@ -1,10 +1,17 @@
 package main;
 
-import java.net.StandardSocketOptions;
 import java.sql.*;
 import java.util.Scanner;
 
+/**
+ * Clase Clientes
+ * En esta clase nos encontraremos todos los metodos relacionados con la tabla Clientes
+ */
 public class Clientes {
+
+    /**
+     * Atributos
+     */
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto?serverTimezone=UTC";
     private static final String USUARIO = "root";
     private static final  String PASWORD=  "Victor.241104";
@@ -12,64 +19,65 @@ public class Clientes {
 
 
     /**
-     * Establece la conexion con la base de datos
-     * @return objeto de conexión
-     * @throws SQLException si ocurre un erros al conectarse
+     * Metodo getConnection
+     * Este metodo genera la conexion con la base de datos mySQL
+     * @return devuelve un objeto de tipo Connection, que es la conexion con la base de datos
+     * @throws SQLException es la excepcion que puede lanzar el metodo, si ha habido algun problema con la conexion
      */
     private static Connection getConnection () throws SQLException {
         return DriverManager.getConnection(URL,USUARIO,PASWORD);
     }
 
     /**
-     * Metodo menu para elegir lo que se quiere hacer
+     * Metodo menu
+     * Este metodo te muestra un menu con las opciones que puedes hacer en la tabla Productos
      */
     public void menu(){
         int opcion;
         do{
             System.out.println("¿Qué quieres hacer?\n1. Añadir cliente\n2.Actualizar datos\n3.Eliminar cliente\n4.Ver compras\n5.Ver clientes\n0.Salir");
-            opcion=sc.nextInt();
+            opcion = this.sc.nextInt();
             switch(opcion){
                 case 1:
                     System.out.println("---Añade cliente---");
                     System.out.println("Nombre del cliente: ");
-                    String nombre = sc.next();
+                    String nombre = this.sc.next();
                     System.out.println("Dirección: ");
-                    String direccion = sc.next() ;
-                    sc.nextLine();
+                    String direccion = this.sc.next() ;
+                    this.sc.nextLine();
                     System.out.println("Contacto");
-                    String contacto= sc.next();
+                    String contacto= this.sc.next();
                     añadirCliente(nombre,direccion,contacto);
                     break;
                 case 2:
                     System.out.println("---Actualizar datos---");
                     System.out.println("ID del cleinte a actualizar: ");
-                    int id= sc.nextInt();
-                    sc.nextLine();//Limpiar el buffer para que no de fallos
+                    int id= this.sc.nextInt();
+                    this.sc.nextLine();//Limpiar el buffer para que no de fallos
                     System.out.println("Nuevo nombre: ");
-                    String nuevoNombre= sc.nextLine();
+                    String nuevoNombre= this.sc.nextLine();
                     System.out.println("Nueva dirección: ");
-                    String nuevaDireccion= sc.nextLine() ;
+                    String nuevaDireccion= this.sc.nextLine() ;
                     System.out.println("Nuevo Contacto: ");
-                    String nuevoContacto= sc.nextLine();
+                    String nuevoContacto= this.sc.nextLine();
                     actualizarDatosCliente(id,nuevoNombre,nuevaDireccion,nuevoContacto);
                     break;
                 case 3:
                     System.out.println("---Elimina cliente---");
                     System.out.println("ID del cliente a elimnar: ");
-                    int idEliminar= sc.nextInt();
+                    int idEliminar= this.sc.nextInt();
                     eliminarCliente(idEliminar);
                     break;
                 case 4:
                     System.out.println("ver compras de un cliente ");
                     System.out.println("ID del cliente para ver compras: ");
-                    int idCliente= sc.nextInt();
+                    int idCliente= this.sc.nextInt();
                     verComprasCliente(idCliente);
                     break;
                 case 5:
                     System.out.println("mostrar clientes ");
                     mostrarCLientes();
                     break;
-
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
@@ -80,7 +88,8 @@ public class Clientes {
     }
 
     /**
-     * Metodo que añade un cliente a la base de datos
+     * Metodo añadirCliente
+     * Este metodo añade un cliente a la base de datos
      * @param nombre nombre del cliente
      * @param direccion direccion del cliente
      * @param contacto numero de telefono
@@ -95,12 +104,13 @@ public class Clientes {
             ps.executeUpdate();
             System.out.println("Cliente añadido correctamente.");
         }catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
     /**
-     * Metodo que actualiza los datos del cliente
+     * Metodo actualizarDatosCliente
+     * Este metodo actualiza los datos del cliente
      * @param idCliente ID del cliente al que hay que actualizar los datos
      * @param nombre Nuevo nombre
      * @param direccion Nueva Direccion
@@ -117,13 +127,14 @@ public class Clientes {
             ps.executeUpdate();
             System.out.println("Cliente actualizado correctamente.");
         }catch(SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
 
     }
 
     /**
-     * Elimina un cliente de la base de datos
+     * Metodo eliminarCliente
+     * Este metodo elimina un cliente de la tabla Clientes
      * @param idCliente ID del cliente
      */
     public void eliminarCliente(int idCliente){
@@ -134,15 +145,16 @@ public class Clientes {
             ps.executeUpdate();
             System.out.println("Cliente eliminado correctamente");
         }catch(SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
 
 
     }
 
     /**
-     * Muestra las compras realizadas por un cliente
-     * @param idCliente
+     * Metodo verComprasCliente
+     * Este metodo muestra las compras realizadas por un cliente
+     * @param idCliente es el id del cliente del que se quiere conocer los datos de compra
      */
     public void verComprasCliente(int idCliente){
        String sql = "SELECT v.id_venta, v.fecha, v.total " +
@@ -160,12 +172,13 @@ public class Clientes {
                        " Total: "+ rs.getDouble("total")));
            }
        }catch(SQLException e){
-           e.printStackTrace();
+           System.out.println("Ha ocurrido un error en la conexión con la base de datos");
        }
     }
 
     /**
-     * Metodo que muestra los clientes
+     * Metodo mostrarClientes
+     * Este metodo muestra todos los clientes de la tabla Clientes
      */
     public void mostrarCLientes (){
         String sql = "SELECT * FROM clientes";
@@ -180,12 +193,8 @@ public class Clientes {
                                    "  Contacto: "+ rs.getString("contacto"));
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
-
-
-
-
 }
 

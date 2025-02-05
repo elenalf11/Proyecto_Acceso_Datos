@@ -1,21 +1,41 @@
 package main;
 
 import java.sql.*;
-import java.util.Date;
 import java.util.Scanner;
 
-
+/**
+ * Clase Pedidos_Proveedores
+ * En esta clase encontraras todos los metodos relacionados con la tabla Pedidos_Proveedores
+ */
 public class Pedidos_Proveedores {
+
+    /**
+     * Atributos
+     */
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto?serverTimezone=UTC";
     private static final String USUARIO = "root";
     private static final  String PASWORD=  "Victor.241104";
     private Scanner sc = new Scanner(System.in);
 
+    /**
+     * Metodo getConnection
+     * Este metodo genera la conexion con la base de datos mySQL
+     * @return devuelve un objeto de tipo Connection, que es la conexion con la base de datos
+     * @throws SQLException es la excepcion que puede lanzar el metodo, si ha habido algun problema con la conexion
+     */
+    private static Connection getConnection () throws SQLException {
+        return DriverManager.getConnection(URL,USUARIO,PASWORD);
+    }
+
+    /**
+     * Metodo menu
+     * Este metodo te muestra un menu con las opciones que puedes hacer en la tabla Productos
+     */
     public void menu(){
         int opcion;
         do{
             System.out.println("¿Qué quieres hacer?\n1.Hacer pedido a proveedor\n2.Modificar Datos Pedidos \n3.Eliminar pedidos \n4.Ver pedidos\n5.Ver información proveedores\n0.Salir");
-            opcion=sc.nextInt();
+            opcion = this.sc.nextInt();
             switch(opcion){
                 case 1:
                     System.out.println("Hacer pedido a proveedor");
@@ -24,19 +44,20 @@ public class Pedidos_Proveedores {
                 case 2:
                     System.out.println("---Actualizar Pedido---");
                     System.out.println("ID del pedido a actualizar: ");
-                    int idPedidoActualizar = sc.nextInt();
+                    int idPedidoActualizar = this.sc.nextInt();
                     System.out.println("Nuevo ID del proveedor del pedido : ");
-                    int idProveedorActualizar=sc.nextInt();
-                    sc.nextLine();//limpia buffer
+                    int idProveedorActualizar = this.sc.nextInt();
+                    this.sc.nextLine();//limpia buffer
                     System.out.println("Nueva fecha del pedido (AAAA-MM-DD): ");
-                    String fechaPedido= sc.nextLine();
+                    String fechaPedido= this.sc.nextLine();
                     System.out.println("Total");
-                    double totalActualizar= sc.nextDouble();
+                    double totalActualizar= this.sc.nextDouble();
                     actualizarPedido(idPedidoActualizar,idProveedorActualizar,fechaPedido,totalActualizar);
+                    break;
                 case 3:
                     System.out.println("---Eliminar pedidos---");
                     System.out.println("ID del pedido a eliminar: ");
-                    int idPedidoEliminar = sc.nextInt();
+                    int idPedidoEliminar = this.sc.nextInt();
                     eliminarPedido(idPedidoEliminar);
                     break;
                 case 4:
@@ -45,6 +66,7 @@ public class Pedidos_Proveedores {
                     break;
                 case 5:
                     System.out.println("ver información proveedor y sus pedidos ");
+
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
@@ -54,25 +76,22 @@ public class Pedidos_Proveedores {
             }
         }while(opcion!=0);
     }
+
     /**
-     * Establece la conexion con la base de datos
-     * @return objeto de conexión
-     * @throws SQLException si ocurre un erros al conectarse
+     * Metodo hacerPedidoProveedor
+     * Este metodo simula un pedido a un proveedor
      */
-    private static Connection getConnection () throws SQLException {
-        return DriverManager.getConnection(URL,USUARIO,PASWORD);
-    }
     public void hacerPedidoProveedor() {
         System.out.println("Ingrese el ID del proveedor:");
-        int idProveedor = sc.nextInt();
+        int idProveedor = this.sc.nextInt();
         System.out.println("Ingrese el ID del producto:");
-        int idProducto = sc.nextInt();
+        int idProducto = this.sc.nextInt();
         System.out.println("Ingrese la cantidad:");
-        int cantidad = sc.nextInt();
+        int cantidad = this.sc.nextInt();
         System.out.println("Ingrese el precio unitario:");
-        double precioUnitario = sc.nextDouble();
+        double precioUnitario = this.sc.nextDouble();
         System.out.println("Ingrese la fecha del pedido (YYYY-MM-DD):");
-        String fechaPedido = sc.next(); // Captura la fecha ingresada
+        String fechaPedido = this.sc.next(); // Captura la fecha ingresada
 
         String sqlPedido = "INSERT INTO pedidos_proveedor (id_proveedor, fecha_pedido, total) VALUES (?, ?, ?)";
         String sqlDetalle = "INSERT INTO detalle_pedido_proveedor (id_pedido, id_producto, cantidad, precio_unitario_proveedor) VALUES (?, ?, ?, ?)";
@@ -111,21 +130,21 @@ public class Pedidos_Proveedores {
                 System.out.println("Pedido realizado y producto actualizado correctamente.");
             } catch (SQLException e) {
                 conn.rollback();  // Revertir transacción en caso de error
-                e.printStackTrace();
                 System.out.println("Error al realizar el pedido. La transacción ha sido revertida.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
 
     /**
-     * Actualiza un pedido de proveedor
-     * @param idPedido
-     * @param idProveedor
-     * @param fechapedido
-     * @param total
+     * Metodo actualizarPedido
+     * Este metodo actualiza un pedido de proveedor
+     * @param idPedido es el id del pedido que se quiere actualizar
+     * @param idProveedor es el nuevo id del proveedor
+     * @param fechapedido es la nueva fecha del pedido
+     * @param total es el nuevo precio total del pedido
      */
     public void actualizarPedido(int idPedido, int idProveedor, String fechapedido, double total){
         String sql = "UPDATE pedidos_proveedor SET id_proveedor =?, fecha_pedido=?, total=? WHERE id_pedido=?";
@@ -138,13 +157,14 @@ public class Pedidos_Proveedores {
             ps.executeUpdate();
             System.out.println("Pedido actualizado correctamente. ");
         }catch( SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
     /**
-     *
-     * @param idPedido
+     * Metodo eliminarPedido
+     * Este metodo elimina un pedido de la tabla Pedidos_Proveedores
+     * @param idPedido es el id del pedido que se desea eliminar
      */
     public void eliminarPedido(int idPedido){
         String sql = "DELETE FROM pedidos_proveedor WHERE id_pedido =?";
@@ -154,9 +174,14 @@ public class Pedidos_Proveedores {
             ps.executeUpdate();
             System.out.println(("Pedido eliminado correctamente. "));
         }catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
+
+    /**
+     * Metodo verPedidos
+     * Este metodo de muestra todos los pedidos de la tabla Pedidos_Proveedores
+     */
     public void verPedidos(){
         String sql = "SELECT * FROM pedidos_proveedor";
         try(Connection conn = getConnection();
@@ -169,7 +194,7 @@ public class Pedidos_Proveedores {
                         " Total: "+ rs.getDouble("total"));
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
 
