@@ -66,6 +66,7 @@ public class Pedidos_Proveedores {
                     break;
                 case 5:
                     System.out.println("ver información proveedor y sus pedidos ");
+                    //verProveedor(int id)
 
                     break;
                 case 0:
@@ -195,6 +196,19 @@ public class Pedidos_Proveedores {
             }
         }catch (SQLException e){
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+        }
+    }
+
+    public void verProveedorPedidos(){
+        String sql= "";
+        try{
+            Connection conn= getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+
+        }catch (SQLException e){
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+
         }
     }
 

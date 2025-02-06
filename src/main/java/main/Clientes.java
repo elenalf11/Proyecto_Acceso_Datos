@@ -96,8 +96,9 @@ public class Clientes {
      */
     public  void añadirCliente (String nombre, String contacto, String direccion)  {
         String sql = "INSERT INTO clientes (nombre,contacto,direccion)VALUES(?,?,?) ";
-        try(Connection conn= getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+        try {
+            Connection conn= getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1,nombre);
             ps.setString(2,contacto);
             ps.setString(3,direccion);
@@ -107,6 +108,8 @@ public class Clientes {
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
+
+
 
     /**
      * Metodo actualizarDatosCliente
