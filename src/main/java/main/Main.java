@@ -1,7 +1,7 @@
 package main;
 
 /**
- * Clase Main
+ * Clase Main3
  * En esta clase iniciamos el programa
  */
 public class Main {

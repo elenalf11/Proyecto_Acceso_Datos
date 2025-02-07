@@ -34,7 +34,7 @@ public class Pedidos_Proveedores {
     public void menu(){
         int opcion;
         do{
-            System.out.println("¿Qué quieres hacer?\n1.Hacer pedido a proveedor\n2.Modificar Datos Pedidos \n3.Eliminar pedidos \n4.Ver pedidos\n5.Ver información proveedores\n0.Salir");
+            System.out.println("¿Qué quieres hacer?\n1.Hacer pedido a proveedor\n2.Modificar Datos Pedidos \n3.Eliminar pedidos \n4.Ver pedidos\n5.Ver proveedores y sus pedidos\n0.Salir");
             opcion = this.sc.nextInt();
             switch(opcion){
                 case 1:
@@ -66,7 +66,9 @@ public class Pedidos_Proveedores {
                     break;
                 case 5:
                     System.out.println("ver información proveedor y sus pedidos ");
-                    //verProveedor(int id)
+                    System.out.println("Introduce el ID del proveedor. ");
+                    int idProvedor= this.sc.nextInt();
+                    verProveedorPedidos(idProvedor);
 
                     break;
                 case 0:
@@ -175,7 +177,7 @@ public class Pedidos_Proveedores {
             ps.executeUpdate();
             System.out.println(("Pedido eliminado correctamente. "));
         }catch (SQLException e){
-            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+            e.printStackTrace();
         }
     }
 
@@ -196,26 +198,41 @@ public class Pedidos_Proveedores {
             }
         }catch (SQLException e){
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+
         }
     }
 
-    public void verProveedorPedidos(){
-        String sql= "";
+    /**
+     * VerProveedorPedidos
+     * Este metodo devuelve los proveedores y sus pedidos
+     * @param id_proveedor id del proveedor
+     */
+    public void verProveedorPedidos(int id_proveedor){
+        String sql= "SELECT pr.id_proveedor, pr.nombre, pr.contacto, pr.direccion, " +
+                "p.id_pedido, p.fecha_pedido, p.total " +
+                "FROM proveedores pr " +
+                "LEFT JOIN pedidos_proveedor p ON pr.id_proveedor = p.id_proveedor " +
+                "WHERE pr.id_proveedor = ?;";
         try{
             Connection conn= getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-
-
+            ps.setInt(1,id_proveedor);
+            ResultSet rs = ps.executeQuery();
+            System.out.println("---Mostrar proveedor y sus pedidos---");
+            while(rs.next()){
+                System.out.println("ID proveedor: " + rs.getInt("id_proveedor")+
+                        "\nNombre Proveedor: "+ rs.getString("nombre")+
+                        "\nID Pedido: "+ rs.getString("id_pedido")+
+                        "\nFecha Pedido: "+ rs.getString("fecha_pedido")+
+                        "\nTotal: "+ rs.getString("total"));
+                System.out.println("----------------------------------");
+            }
         }catch (SQLException e){
-            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+            //System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+            e.printStackTrace();
 
         }
     }
-
-
-
-
-
 }
 
 //select=> select =>update para comprar a los proevedores

@@ -14,7 +14,7 @@ public class Empleados {
      */
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto?serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASS = "110805";
+    private static final String PASS = "Victor.241104";
     private Scanner sc = new Scanner(System.in);
 
     /**
@@ -148,10 +148,10 @@ public class Empleados {
             Connection c = getConnection();
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setInt(1, id_empleado);
-            ps.executeQuery();
+            ps.executeUpdate();
             System.out.println("Empleado eliminado correctamente");
         } catch (SQLException e){
-            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+           e.printStackTrace();
         }
 
     }

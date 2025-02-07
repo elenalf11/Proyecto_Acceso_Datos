@@ -34,7 +34,7 @@ public class Proveedores {
     public void menu() {
         int opcion;
         do {
-            System.out.println("¿Qué quieres hacer?\n1. Añadir proveedor\n2.Actualizar Proveedor \n3.Eliminar Proveedor\n4.Ver proveedores\n5. mostrar detalle pedidos proveedores \n0. Salir");
+            System.out.println("¿Qué quieres hacer?\n1. Añadir proveedor\n2.Actualizar Proveedor \n3.Eliminar Proveedor\n4.Ver proveedores\n5.Mostrar detalle pedidos proveedores \n0. Salir");
             opcion = this.sc.nextInt();
             switch (opcion) {
                 case 1:
@@ -147,7 +147,7 @@ public class Proveedores {
             ps.executeUpdate();
             System.out.println("Proveedor eliminado correctamente");
         } catch (SQLException e) {
-            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+            e.printStackTrace();
         }
     }
 
@@ -187,7 +187,7 @@ public class Proveedores {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idProveedor);
             ResultSet rs = ps.executeQuery();
-            System.out.println("\n--- Detalles de Pedidos del Proveedor ---");
+            System.out.println("\n--- Detalles de Pedidos del Proveedor con ID: "+idProveedor+"---");
             while (rs.next()) {
                 System.out.println("ID Pedido: " + rs.getInt("id_pedido") +
                         ", Fecha Pedido: " + rs.getString("fecha_pedido") +
