@@ -14,7 +14,7 @@ public class Empleados {
      */
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto?serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASS = "Victor.241104";
+    private static final String PASS = "110805";
     private Scanner sc = new Scanner(System.in);
 
     /**
@@ -28,12 +28,21 @@ public class Empleados {
     }
 
     /**
+     * Metodo clean
+     * Este metodo simula limpiar la consola, para que sea mas legible
+     */
+    private void clean(){
+        for (int i = 0; i <= 50; i++){
+            System.out.println();
+        }
+    }
+
+    /**
      * Metodo menu
      * Este metodo te muestra las opciones que puedes realizar en esta clase
      */
     public void menu(){
         int opcion;
-        int id;
         do{
             System.out.println("¿Qué quieres hacer?\n1. Añadir empleado\n2. Actualizar datos\n3. Eliminar empleado\n4. Ver departamento\n5. Ver todos los empleados\n0. Salir");
             opcion = sc.nextInt();
@@ -41,48 +50,54 @@ public class Empleados {
                 case 1:
                     System.out.println("Nombre empleado: ");
                     String nombre = this.sc.next();
-                    do{
-                        System.out.println("id_departamento (1-10): ");
-                        id = this.sc.nextInt();
-                    } while(id >= 1 && id <= 10);
+                    System.out.println("id_departamento (1-10): ");
+                    int id = this.sc.nextInt();
                     System.out.println("Dirección: ");
                     String direccion = this.sc.next();
+                    this.sc.nextLine();
                     System.out.println("Contacto: ");
                     String contacto = this.sc.next();
                     addEmpleado(nombre, id, direccion, contacto);
+                    clean();
                     break;
                 case 2:
                     System.out.println("Id empleado: ");
                     int id_empleado = this.sc.nextInt();
                     System.out.println("Nuevo nombre: ");
                     String nombre_new = this.sc.next();
-                    do{
-                        System.out.println("id_departamento (1-10): ");
-                        id = this.sc.nextInt();
-                    } while(id >=1 && id <= 10);
+                    System.out.println("id_departamento (1-10): ");
+                    int id_new = this.sc.nextInt();
                     System.out.println("Nueva dirección: ");
                     String direccion_new = this.sc.next();
+                    this.sc.nextLine();
                     System.out.println("Nuevo contacto: ");
                     String contacto_new = this.sc.next();
-                    updateEmpleado(nombre_new, id, direccion_new, contacto_new, id_empleado);
+                    updateEmpleado(nombre_new, id_new, direccion_new, contacto_new, id_empleado);
+                    clean();
                     break;
                 case 3:
                     System.out.println("Id empleado para eliminar: ");
                     int id_eliminado = this.sc.nextInt();
                     eliminarEmpleado(id_eliminado);
+                    clean();
                     break;
                 case 4:
                     System.out.println("Id empleado que desea ver su departamento: ");
                     int id_join = this.sc.nextInt();
                     verDepartamento(id_join);
+                    clean();
                     break;
                 case 5:
                     verEmpleados();
+                    clean();
+                    break;
                 case 0:
                     System.out.println("Saliendo ...");
+                    clean();
                     break;
                 default:
                     System.out.println("Opción inválida, vuelve a seleccionar");
+                    clean();
             }
         } while(opcion != 0 );
     }
@@ -95,19 +110,31 @@ public class Empleados {
      * @param direccion es la direccion del nuevo empleado
      * @param contacto es el contacto del nuevo empleado
      */
-    public void addEmpleado(String nombre, int id_departamento, String direccion, String contacto){
+    public void addEmpleado(String nombre, int id_departamento, String direccion, String contacto) {
         String sql = "INSERT INTO empleados (nombre, id_departamento, direccion, contacto) VALUES (?,?,?,?);";
-        try{
-            Connection c = getConnection();
-            PreparedStatement ps = c.prepareStatement(sql);
+        PreparedStatement ps = null;
+        Connection c = null;
+        try {
+            c = getConnection();
+            ps = c.prepareStatement(sql);
             ps.setString(1, nombre);
             ps.setInt(2, id_departamento);
             ps.setString(3, direccion);
             ps.setString(4, contacto);
-            ps.executeQuery();
+            ps.executeUpdate();
             System.out.println("Empleado añadido correctamente a la tabla");
-        } catch (SQLException e){
+        } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+        } finally {
+            try{
+                if (ps != null) ps.close();
+                if (c != null) c.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error al cerrar las conexiones");
+            }
+
         }
     }
 
@@ -122,18 +149,29 @@ public class Empleados {
      */
     public void updateEmpleado(String nombre, int id_departamento, String direccion, String contacto, int id_empleado){
         String sql = "UPDATE empleados SET nombre = ?, id_departamento = ?, direccion = ?, contacto = ? WHERE id_empleado = ?;";
+        Connection c = null;
+        PreparedStatement ps = null;
         try{
-            Connection c = getConnection();
-            PreparedStatement ps = c.prepareStatement(sql);
+            c = getConnection();
+            ps = c.prepareStatement(sql);
             ps.setString(1, nombre);
             ps.setInt(2, id_departamento);
             ps.setString(3, direccion);
             ps.setString(4, contacto);
             ps.setInt(5, id_empleado);
-            ps.executeQuery();
+            ps.executeUpdate();
             System.out.println("Datos del empleado actualizados correctamente");
         } catch (SQLException e){
+            e.printStackTrace();
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+        } finally{
+            try{
+                if (ps != null) ps.close();
+                if (c != null) c.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error al cerrar las conexiones");
+            }
         }
     }
 
@@ -144,14 +182,25 @@ public class Empleados {
      */
     public void eliminarEmpleado(int id_empleado){
         String sql = "DELETE FROM empleados WHERE id_empleado = ?;";
+        Connection c = null;
+        PreparedStatement ps = null;
         try{
-            Connection c = getConnection();
-            PreparedStatement ps = c.prepareStatement(sql);
+            c = getConnection();
+            ps = c.prepareStatement(sql);
             ps.setInt(1, id_empleado);
             ps.executeUpdate();
             System.out.println("Empleado eliminado correctamente");
         } catch (SQLException e){
-           e.printStackTrace();
+            e.printStackTrace();
+            System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+        } finally{
+            try{
+                if (ps != null) ps.close();
+                if (c != null) c.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error al cerrar las conexiones");
+            }
         }
 
     }
@@ -162,17 +211,35 @@ public class Empleados {
      * @param id_empleado es el id de empleado que se desea saber su departamento
      */
     public void verDepartamento(int id_empleado){
-        String sql = "SELECT d.id, d.nombre FROM departamentos d" +
-                "JOIN empleados e ON d.id = e.id_empleado" +
+        String sql = "SELECT d.id, d.nombre FROM departamentos d " +
+                "JOIN empleados e ON d.id = e.id_departamento " +
                 "WHERE e.id_empleado = ?;";
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try{
-            Connection c = getConnection();
-            PreparedStatement ps = c.prepareStatement(sql);
+            c = getConnection();
+            ps = c.prepareStatement(sql);
             ps.setInt(1, id_empleado);
-            ResultSet rs = ps.executeQuery();
-            System.out.println("\n El departamento del cliente con id: " + id_empleado + "es id: " + rs.getInt("id") + " con nombre: " + rs.getString("nombre"));
+            rs = ps.executeQuery();
+            if(rs.next()){
+                System.out.println("\n El departamento del cliente con id: " + id_empleado + " es id: " + rs.getInt("id") + " con nombre: " + rs.getString("nombre"));
+            } else{
+                System.out.println("\n El departamento no existe");
+            }
+
         } catch (SQLException e){
+            e.printStackTrace();
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+        } finally {
+            try{
+                if (ps != null) ps.close();
+                if (c != null) c.close();
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error al cerrar las conexiones");
+            }
         }
     }
 
@@ -182,21 +249,34 @@ public class Empleados {
      */
     public void verEmpleados(){
         String sql = "SELECT * FROM empleados";
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try{
-            Connection c = getConnection();
-            PreparedStatement ps = c.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();{
+            c = getConnection();
+            ps = c.prepareStatement(sql);
+            rs = ps.executeQuery();{
                 System.out.println("\n--------- Lista de empleados ---------");
                 while(rs.next()){
                     System.out.println("Id: " + rs.getInt("id_empleado")
                             + " Nombre: " + rs.getString("nombre")
                             + " Id departamento: " + rs.getInt("id_departamento")
                             + " Dirección: " + rs.getString("direccion")
-                            + " Contacto: " + rs.getInt("contacto"));
+                            + " Contacto: " + rs.getString("contacto"));
                 }
             }
         } catch (SQLException e){
+            e.printStackTrace();
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
+        } finally {
+            try{
+                if (ps != null) ps.close();
+                if (c != null) c.close();
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error al cerrar las conexiones");
+            }
         }
     }
 }

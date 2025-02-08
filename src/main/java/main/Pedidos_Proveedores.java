@@ -28,6 +28,16 @@ public class Pedidos_Proveedores {
     }
 
     /**
+     * Metodo clean
+     * Este metodo simula limpiar la consola, para que sea mas legible
+     */
+    private void clean(){
+        for (int i = 0; i <= 50; i++){
+            System.out.println();
+        }
+    }
+
+    /**
      * Metodo menu
      * Este metodo te muestra un menu con las opciones que puedes hacer en la tabla Productos
      */
@@ -40,6 +50,7 @@ public class Pedidos_Proveedores {
                 case 1:
                     System.out.println("Hacer pedido a proveedor");
                     hacerPedidoProveedor();
+                    clean();
                     break;
                 case 2:
                     System.out.println("---Actualizar Pedido---");
@@ -53,26 +64,30 @@ public class Pedidos_Proveedores {
                     System.out.println("Total");
                     double totalActualizar= this.sc.nextDouble();
                     actualizarPedido(idPedidoActualizar,idProveedorActualizar,fechaPedido,totalActualizar);
+                    clean();
                     break;
                 case 3:
                     System.out.println("---Eliminar pedidos---");
                     System.out.println("ID del pedido a eliminar: ");
                     int idPedidoEliminar = this.sc.nextInt();
                     eliminarPedido(idPedidoEliminar);
+                    clean();
                     break;
                 case 4:
                     System.out.println("---Ver Pedidos---");
                     verPedidos();
+                    clean();
                     break;
                 case 5:
                     System.out.println("ver información proveedor y sus pedidos ");
                     System.out.println("Introduce el ID del proveedor. ");
                     int idProvedor= this.sc.nextInt();
                     verProveedorPedidos(idProvedor);
-
+                    clean();
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
+                    clean();
                     break;
                 default:
                     System.out.println("Opción invalida");

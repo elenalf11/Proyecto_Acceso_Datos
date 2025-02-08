@@ -29,6 +29,16 @@ public class Clientes {
     }
 
     /**
+     * Metodo clean
+     * Este metodo simula limpiar la consola, para que sea mas legible
+     */
+    private void clean(){
+        for (int i = 0; i <= 50; i++){
+            System.out.println();
+        }
+    }
+
+    /**
      * Metodo menu
      * Este metodo te muestra un menu con las opciones que puedes hacer en la tabla Productos
      */
@@ -48,6 +58,7 @@ public class Clientes {
                     System.out.println("Contacto");
                     String contacto= this.sc.next();
                     añadirCliente(nombre,direccion,contacto);
+                    clean();
                     break;
                 case 2:
                     System.out.println("---Actualizar datos---");
@@ -61,25 +72,30 @@ public class Clientes {
                     System.out.println("Nuevo Contacto: ");
                     String nuevoContacto= this.sc.nextLine();
                     actualizarDatosCliente(id,nuevoNombre,nuevaDireccion,nuevoContacto);
+                    clean();
                     break;
                 case 3:
                     System.out.println("---Elimina cliente---");
                     System.out.println("ID del cliente a elimnar: ");
                     int idEliminar= this.sc.nextInt();
                     eliminarCliente(idEliminar);
+                    clean();
                     break;
                 case 4:
                     System.out.println("ver compras de un cliente ");
                     System.out.println("ID del cliente para ver compras: ");
                     int idCliente= this.sc.nextInt();
                     verComprasCliente(idCliente);
+                    clean();
                     break;
                 case 5:
                     System.out.println("mostrar clientes ");
                     mostrarCLientes();
+                    clean();
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
+                    clean();
                     break;
                 default:
                     System.out.println("Opción invalida");
