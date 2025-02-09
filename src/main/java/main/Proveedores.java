@@ -57,6 +57,11 @@ public class Proveedores {
                     System.out.println("Dirección proveedor: ");
                     String direccion = this.sc.nextLine();
                     añadirProveedor(nombre, contacto, direccion);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 2:
@@ -71,7 +76,11 @@ public class Proveedores {
                     System.out.println("Nueva Dirección: ");
                     String nuevaDireccion = this.sc.nextLine();
                     actualizarDatosProveedor(id, nuevoNombre, nuevaDireccion, nuevoContacto);
-                    System.out.println("Actualiza proveedor");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 3:
@@ -79,11 +88,21 @@ public class Proveedores {
                     System.out.println(("Id_proveedor a eliminar: "));
                     int idEliminar = this.sc.nextInt();
                     eliminaProveedor(idEliminar);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 4:
                     System.out.println("---Mostrar proveedores---");
                     mostrarProveedor();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 5:
@@ -91,10 +110,20 @@ public class Proveedores {
                     System.out.print("ID del proveedor para ver detalles de pedidos: ");
                     int idProveedor = this.sc.nextInt();
                     mostrarDetallePedidosProveedor(idProveedor);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 default:

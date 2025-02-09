@@ -57,22 +57,42 @@ public class Ventas {
                     System.out.println("Dime el id de la venta que quieras modificar (1 - 40): ");
                     int id_venta_new = this.sc.nextInt();
                     actualizarVenta(id_cliente_new, fecha_new, total_new, id_venta_new);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 2:
                     System.out.println("Dime el id de la venta que quieres eliminar: ");
                     int id_eliminado = this.sc.nextInt();
                     eliminarVenta(id_eliminado);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 3:
                     verVentas();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 4:
                     System.out.println("Dime el id del cliente que ha efectuado la compra: ");
                     int id_join = this.sc.nextInt();
                     ownerVenta(id_join);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 5:
@@ -83,10 +103,20 @@ public class Ventas {
                     System.out.println("Dime el precio total de la venta: ");
                     double total = this.sc.nextDouble();
                     addVenta(id_cliente, fecha, total);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 0:
                     System.out.println("Saliendo ...");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 default:

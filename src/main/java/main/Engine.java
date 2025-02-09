@@ -12,7 +12,7 @@ public class Engine {
     /**
      * Atributos
      */
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
 
     /**
      * Metodo start
@@ -23,7 +23,7 @@ public class Engine {
         do{
             System.out.print("Bienvenido a nuestro supermercado, ¿qué información te gustaría consultar? :" +
                     "\n1. Clientes\n2. Empleados\n3. Pedidos Proveedores\n4. Productos\n5. Proveedores\n6. Ventas\n0. Salir del programa");
-            opcion = sc.nextInt();
+            opcion = this.sc.nextInt();
             switch (opcion){
                 case 1:
                     System.out.println("Mostrar info sobre Clientes");
@@ -42,6 +42,8 @@ public class Engine {
                     break;
                 case 4:
                     System.out.println("Mostrar info sobre Productos");
+                    Productos pr = new Productos();
+                    pr.menu();
                     break;
                 case 5:
                     System.out.println("Mostar info sobre Proveedores");
