@@ -62,6 +62,11 @@ public class Productos {
                     System.out.println("Fecha de caducidad del producto (AAAA-MM-DD): ");
                     String fecha_caducidad = this.sc.next();
                     addProducto(nombre, precio, stock, id_categoria, id_proveedor, fecha_caducidad);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 2:
@@ -81,32 +86,62 @@ public class Productos {
                     System.out.println("Id del producto que quieras actualizar: ");
                     int id_producto = this.sc.nextInt();
                     updateProducto(nombre_new, precio_new, stock_new, id_categoria_new, id_proveedor_new, fecha_caducidad_new, id_producto);
-                    clean();
+                    this.sc.next();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 3:
                     System.out.println("Id del producto: ");
                     int id = this.sc.nextInt();
                     deleteProducto(id);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 4:
                     verInventario();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 5:
                     System.out.println("Dime el id del producto del que quieras saber la info: ");
                     int id_join_1 = this.sc.nextInt();
                     verProveedores(id_join_1);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 6:
                     System.out.println("Dime el id de producto del que quieras saber la info: ");
                     int id_join_2 = this.sc.nextInt();
                     verCategoria(id_join_2);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 0:
                     System.out.println("Saliendo ...");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 default:

@@ -58,6 +58,11 @@ public class Empleados {
                     System.out.println("Contacto: ");
                     String contacto = this.sc.next();
                     addEmpleado(nombre, id, direccion, contacto);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 2:
@@ -73,31 +78,55 @@ public class Empleados {
                     System.out.println("Nuevo contacto: ");
                     String contacto_new = this.sc.next();
                     updateEmpleado(nombre_new, id_new, direccion_new, contacto_new, id_empleado);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 3:
                     System.out.println("Id empleado para eliminar: ");
                     int id_eliminado = this.sc.nextInt();
                     eliminarEmpleado(id_eliminado);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 4:
                     System.out.println("Id empleado que desea ver su departamento: ");
                     int id_join = this.sc.nextInt();
                     verDepartamento(id_join);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 5:
                     verEmpleados();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 0:
                     System.out.println("Saliendo ...");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 default:
                     System.out.println("Opción inválida, vuelve a seleccionar");
-                    clean();
             }
         } while(opcion != 0 );
     }

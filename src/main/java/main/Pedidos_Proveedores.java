@@ -50,6 +50,11 @@ public class Pedidos_Proveedores {
                 case 1:
                     System.out.println("Hacer pedido a proveedor");
                     hacerPedidoProveedor();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 2:
@@ -64,6 +69,11 @@ public class Pedidos_Proveedores {
                     System.out.println("Total");
                     double totalActualizar= this.sc.nextDouble();
                     actualizarPedido(idPedidoActualizar,idProveedorActualizar,fechaPedido,totalActualizar);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 3:
@@ -71,11 +81,21 @@ public class Pedidos_Proveedores {
                     System.out.println("ID del pedido a eliminar: ");
                     int idPedidoEliminar = this.sc.nextInt();
                     eliminarPedido(idPedidoEliminar);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 4:
                     System.out.println("---Ver Pedidos---");
                     verPedidos();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 5:
@@ -83,10 +103,20 @@ public class Pedidos_Proveedores {
                     System.out.println("Introduce el ID del proveedor. ");
                     int idProvedor= this.sc.nextInt();
                     verProveedorPedidos(idProvedor);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 default:

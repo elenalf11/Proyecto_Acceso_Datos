@@ -58,6 +58,11 @@ public class Clientes {
                     System.out.println("Contacto");
                     String contacto= this.sc.next();
                     añadirCliente(nombre,direccion,contacto);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 2:
@@ -72,6 +77,11 @@ public class Clientes {
                     System.out.println("Nuevo Contacto: ");
                     String nuevoContacto= this.sc.nextLine();
                     actualizarDatosCliente(id,nuevoNombre,nuevaDireccion,nuevoContacto);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 3:
@@ -79,6 +89,11 @@ public class Clientes {
                     System.out.println("ID del cliente a elimnar: ");
                     int idEliminar= this.sc.nextInt();
                     eliminarCliente(idEliminar);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 4:
@@ -86,15 +101,30 @@ public class Clientes {
                     System.out.println("ID del cliente para ver compras: ");
                     int idCliente= this.sc.nextInt();
                     verComprasCliente(idCliente);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 5:
                     System.out.println("mostrar clientes ");
                     mostrarCLientes();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     clean();
                     break;
                 default:
@@ -110,7 +140,7 @@ public class Clientes {
      * @param direccion direccion del cliente
      * @param contacto numero de telefono
      */
-    public  void añadirCliente (String nombre, String contacto, String direccion)  {
+    public void añadirCliente (String nombre, String contacto, String direccion)  {
         String sql = "INSERT INTO clientes (nombre,contacto,direccion)VALUES(?,?,?) ";
         try {
             Connection conn= getConnection();
@@ -135,7 +165,7 @@ public class Clientes {
      * @param direccion Nueva Direccion
      * @param contacto Nuevo telefono
      */
-    public  void actualizarDatosCliente(int idCliente, String nombre, String contacto, String direccion){
+    public void actualizarDatosCliente(int idCliente, String nombre, String contacto, String direccion){
         String sql = "UPDATE clientes SET nombre=?, direccion=?, contacto=? WHERE id_cliente=?";
         try (Connection conn= getConnection();
              PreparedStatement ps= conn.prepareStatement(sql)){
