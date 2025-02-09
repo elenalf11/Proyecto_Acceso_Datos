@@ -424,3 +424,62 @@ INSERT INTO detalle_pedido_proveedor (id_pedido, id_producto, cantidad, precio_u
 (10, 20, 50, 2.80),
 (10, 21, 100, 1.20);
 SELECT * FROM detalle_pedido_proveedor;
+ALTER TABLE productos
+DROP FOREIGN KEY productos_ibfk_1,
+DROP FOREIGN KEY productos_ibfk_2;
+
+ALTER TABLE productos
+ADD CONSTRAINT fk_productos_categorias
+FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+ON DELETE CASCADE,
+ADD CONSTRAINT fk_productos_proveedores
+FOREIGN KEY (id_proveedor) REFERENCES proveedores(id_proveedor)
+ON DELETE CASCADE;
+
+ALTER TABLE ventas
+DROP FOREIGN KEY ventas_ibfk_1;
+
+ALTER TABLE ventas
+ADD CONSTRAINT fk_ventas_clientes
+FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
+ON DELETE CASCADE;
+
+ALTER TABLE detalle_ventas
+DROP FOREIGN KEY detalle_ventas_ibfk_1,
+DROP FOREIGN KEY detalle_ventas_ibfk_2;
+
+ALTER TABLE detalle_ventas
+ADD CONSTRAINT fk_detalle_ventas_ventas
+FOREIGN KEY (id_venta) REFERENCES ventas(id_venta)
+ON DELETE CASCADE,
+ADD CONSTRAINT fk_detalle_ventas_productos
+FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+ON DELETE CASCADE;
+
+ALTER TABLE empleados
+DROP FOREIGN KEY empleados_ibfk_1;
+
+ALTER TABLE empleados
+ADD CONSTRAINT fk_empleados_departamentos
+FOREIGN KEY (id_departamento) REFERENCES departamentos(id)
+ON DELETE CASCADE;
+
+ALTER TABLE pedidos_proveedor
+DROP FOREIGN KEY pedidos_proveedor_ibfk_1;
+
+ALTER TABLE pedidos_proveedor
+ADD CONSTRAINT fk_pedidos_proveedor_proveedores
+FOREIGN KEY (id_proveedor) REFERENCES proveedores(id_proveedor)
+ON DELETE CASCADE;
+
+ALTER TABLE detalle_pedido_proveedor
+DROP FOREIGN KEY detalle_pedido_proveedor_ibfk_1,
+DROP FOREIGN KEY detalle_pedido_proveedor_ibfk_2;
+
+ALTER TABLE detalle_pedido_proveedor
+ADD CONSTRAINT fk_detalle_pedido_proveedor_pedidos
+FOREIGN KEY (id_pedido) REFERENCES pedidos_proveedor(id_pedido)
+ON DELETE CASCADE,
+ADD CONSTRAINT fk_detalle_pedido_proveedor_productos
+FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+ON DELETE CASCADE;
