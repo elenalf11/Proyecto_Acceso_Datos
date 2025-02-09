@@ -482,4 +482,8 @@ FOREIGN KEY (id_pedido) REFERENCES pedidos_proveedor(id_pedido)
 ON DELETE CASCADE,
 ADD CONSTRAINT fk_detalle_pedido_proveedor_productos
 FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
-ON DELETE CASCADE;
+
+ON DELETE CASCADE;
+
+
+
