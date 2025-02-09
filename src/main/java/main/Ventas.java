@@ -44,7 +44,7 @@ public class Ventas {
     public void menu(){
         int opcion;
         do{
-            System.out.println("¿Qué quieres hacer?\n1. Actualizar datos\n2. Eliminar venta\n3. Ver todas las ventas\n4. Ver información sobre el cliente\n5. Añadir venta \n0. Salir");
+            System.out.println("¿Qué quieres hacer?\n1. Actualizar datos\n2. Eliminar venta\n3. Ver todas las ventas\n4. Ver información sobre el cliente\n5. Realizar venta \n0. Salir");
             opcion = this.sc.nextInt();
             switch (opcion){
                 case 1:
@@ -96,13 +96,7 @@ public class Ventas {
                     clean();
                     break;
                 case 5:
-                    System.out.println("Dime el id de cliente (1 - 31): ");
-                    int id_cliente = this.sc.nextInt();
-                    System.out.println("Dime la fecha de la venta (AAAA-MM-DD): ");
-                    String fecha = this.sc.next();
-                    System.out.println("Dime el precio total de la venta: ");
-                    double total = this.sc.nextDouble();
-                    addVenta(id_cliente, fecha, total);
+                    hacerVenta();
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
@@ -199,36 +193,63 @@ public class Ventas {
     }
 
     /**
-     * Metodo addVenta
-     * Este metodo agrega una venta a la tabla Ventas
-     * @param id_cliente es el id de cliente de la nueva venta
-     * @param fecha es la fecha de la nueva venta
-     * @param total es el precio total de la nueva venta
+     * Metodo hacerVenta
+     * Este metodo simula la compra de productos
      */
-    public void addVenta(int id_cliente, String fecha, double total){
-        String sql = "INSERT INTO ventas (id_cliente, fecha, total) VALUES (?, ?, ?);";
-        Connection c = null;
-        PreparedStatement ps = null;
-        try{
-            c = getConnection();
-            ps = c.prepareStatement(sql);
-            ps.setInt(1, id_cliente);
-            ps.setString(2, fecha);
-            ps.setDouble(3, total);
-            ps.executeUpdate();
-            System.out.println("Venta añadida a la tabla correctamente");
+    public void hacerVenta(){
+        System.out.println("Dime el id del cliente: ");
+        int id_cliente = this.sc.nextInt();
+        System.out.println("Dime el id del producto: ");
+        int id_producto = this.sc.nextInt();
+        System.out.println("Dime la cantidad: ");
+        int cantidad = this.sc.nextInt();
+        System.out.println("Dime el precio del producto: ");
+        double precio = this.sc.nextDouble();
+        System.out.println("Dime la fecha de hoy (AAAA-MM-DD): ");
+        String fecha = this.sc.next();
+
+        String sqlVenta = "INSERT INTO ventas (id_cliente, fecha, total) VALUES (?, ?, ?);";
+        String sqlDetalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?);";
+        String sqlProducto = "UPDATE productos SET stock = stock - ? WHERE id_producto = ?;";
+
+        try (Connection c = getConnection()){
+            c.setAutoCommit(false);
+            try (PreparedStatement psVenta = c.prepareStatement(sqlVenta, PreparedStatement.RETURN_GENERATED_KEYS)){
+                psVenta.setInt(1, id_cliente);
+                psVenta.setString(2, fecha);
+                psVenta.setDouble(3, cantidad * precio);
+                psVenta.executeUpdate();
+
+                ResultSet rs = psVenta.getGeneratedKeys();
+                int id_venta = 0;
+                if (rs.next()){
+                    id_venta = rs.getInt(1);
+                }
+
+                try (PreparedStatement psDetalle = c.prepareStatement(sqlDetalle)){
+                    psDetalle.setInt(1, id_venta);
+                    psDetalle.setInt(2, id_producto);
+                    psDetalle.setInt(3, cantidad);
+                    psDetalle.setDouble(4, precio);
+                }
+
+                try (PreparedStatement psProducto = c.prepareStatement(sqlProducto)){
+                    psProducto.setInt(1, cantidad);
+                    psProducto.setInt(2, id_producto);
+                }
+
+                c.commit();
+                System.out.println("Venta realizada correctamente y producto actualizado");
+            } catch (SQLException e){
+                c.rollback();
+                e.printStackTrace();
+                System.out.println("Error al realizar la venta. La transacción ha sido revertida.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
-        } finally{
-            try{
-                if (ps != null) ps.close();
-                if (c != null) c.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("Error al cerrar las conexiones");
-            }
         }
+
     }
 
     /**

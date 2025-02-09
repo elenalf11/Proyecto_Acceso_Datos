@@ -178,9 +178,11 @@ public class Pedidos_Proveedores {
                 System.out.println("Pedido realizado y producto actualizado correctamente.");
             } catch (SQLException e) {
                 conn.rollback();  // Revertir transacción en caso de error
+                e.printStackTrace();
                 System.out.println("Error al realizar el pedido. La transacción ha sido revertida.");
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
     }
