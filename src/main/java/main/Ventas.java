@@ -209,7 +209,7 @@ public class Ventas {
         String sqlPrecio = "SELECT precio FROM productos WHERE id_producto = ?;";
         String sqlVenta = "INSERT INTO ventas (id_cliente, fecha, total) VALUES (?, ?, ?);";
         String sqlDetalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?);";
-        String sqlProducto = "UPDATE productos SET stock = stock - ? WHERE id_producto = ?;";
+        String sqlProducto = "UPDATE productos SET stock = stock - ? WHERE id_producto = ? AND WHERE ? <= stock;";
 
         try (Connection c = getConnection()) {
             c.setAutoCommit(false);
@@ -249,7 +249,8 @@ public class Ventas {
 
                 try (PreparedStatement psProducto = c.prepareStatement(sqlProducto)) {
                     psProducto.setInt(1, cantidad);
-                    psProducto.setInt(2, id_producto);
+                    psProducto.setInt(2, cantidad);
+                    psProducto.setInt(3, id_producto);
                     psProducto.executeUpdate();
                 }
 
