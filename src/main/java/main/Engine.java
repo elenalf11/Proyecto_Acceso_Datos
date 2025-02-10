@@ -52,6 +52,8 @@ public class Engine {
                     break;
                 case 6:
                     System.out.println("Mostrar info sobre Ventas");
+                    Ventas venta = new Ventas();
+                    venta.menu();
                     break;
                 case 0:
                     System.out.println("Saliendo del programa ...");

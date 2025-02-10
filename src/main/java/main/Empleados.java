@@ -14,7 +14,7 @@ public class Empleados {
      */
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto?serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASS = "110805";
+    private static final String PASS = "Victor.241104";
     private Scanner sc = new Scanner(System.in);
 
     /**

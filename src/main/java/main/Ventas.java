@@ -14,7 +14,7 @@ public class Ventas {
      */
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto?serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASS = "110805";
+    private static final String PASS = "Victor.241104";
     private Scanner sc = new Scanner(System.in);
 
     /**
@@ -196,25 +196,38 @@ public class Ventas {
      * Metodo hacerVenta
      * Este metodo simula la compra de productos
      */
-    public void hacerVenta(){
+    public void hacerVenta() {
         System.out.println("Dime el id del cliente: ");
         int id_cliente = this.sc.nextInt();
         System.out.println("Dime el id del producto: ");
         int id_producto = this.sc.nextInt();
         System.out.println("Dime la cantidad: ");
         int cantidad = this.sc.nextInt();
-        System.out.println("Dime el precio del producto: ");
-        double precio = this.sc.nextDouble();
         System.out.println("Dime la fecha de hoy (AAAA-MM-DD): ");
         String fecha = this.sc.next();
 
+        String sqlPrecio = "SELECT precio FROM productos WHERE id_producto = ?;";
         String sqlVenta = "INSERT INTO ventas (id_cliente, fecha, total) VALUES (?, ?, ?);";
         String sqlDetalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?);";
         String sqlProducto = "UPDATE productos SET stock = stock - ? WHERE id_producto = ?;";
 
-        try (Connection c = getConnection()){
+        try (Connection c = getConnection()) {
             c.setAutoCommit(false);
-            try (PreparedStatement psVenta = c.prepareStatement(sqlVenta, PreparedStatement.RETURN_GENERATED_KEYS)){
+            double precio = 0;
+
+            // Obtener el precio del producto desde la base de datos
+            try (PreparedStatement psPrecio = c.prepareStatement(sqlPrecio)) {
+                psPrecio.setInt(1, id_producto);
+                ResultSet rs = psPrecio.executeQuery();
+                if (rs.next()) {
+                    precio = rs.getDouble("precio");
+                } else {
+                    System.out.println("Producto no encontrado.");
+                    return;
+                }
+            }
+
+            try (PreparedStatement psVenta = c.prepareStatement(sqlVenta, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 psVenta.setInt(1, id_cliente);
                 psVenta.setString(2, fecha);
                 psVenta.setDouble(3, cantidad * precio);
@@ -222,25 +235,27 @@ public class Ventas {
 
                 ResultSet rs = psVenta.getGeneratedKeys();
                 int id_venta = 0;
-                if (rs.next()){
+                if (rs.next()) {
                     id_venta = rs.getInt(1);
                 }
 
-                try (PreparedStatement psDetalle = c.prepareStatement(sqlDetalle)){
+                try (PreparedStatement psDetalle = c.prepareStatement(sqlDetalle)) {
                     psDetalle.setInt(1, id_venta);
                     psDetalle.setInt(2, id_producto);
                     psDetalle.setInt(3, cantidad);
                     psDetalle.setDouble(4, precio);
+                    psDetalle.executeUpdate();
                 }
 
-                try (PreparedStatement psProducto = c.prepareStatement(sqlProducto)){
+                try (PreparedStatement psProducto = c.prepareStatement(sqlProducto)) {
                     psProducto.setInt(1, cantidad);
                     psProducto.setInt(2, id_producto);
+                    psProducto.executeUpdate();
                 }
 
                 c.commit();
                 System.out.println("Venta realizada correctamente y producto actualizado");
-            } catch (SQLException e){
+            } catch (SQLException e) {
                 c.rollback();
                 e.printStackTrace();
                 System.out.println("Error al realizar la venta. La transacción ha sido revertida.");
@@ -249,7 +264,6 @@ public class Ventas {
             e.printStackTrace();
             System.out.println("Ha ocurrido un error en la conexión con la base de datos");
         }
-
     }
 
     /**
